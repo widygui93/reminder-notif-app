@@ -1,0 +1,20 @@
+{
+  "name": "reminder-notif-app",
+  "version": "1.0.0",
+  "description": "simple reminder notif app to send WhatsApp message to customers",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Widy Guilias",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "mysql2": "^3.14.2",
+    "sequelize": "^6.37.7",
+    "twilio": "^5.7.1"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.3"
+  }
+}
