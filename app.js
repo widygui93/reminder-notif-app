@@ -1,7 +1,12 @@
 const twilio = require("twilio");
 const db = require('./models/index');
 const crypto = require('crypto');
+const express = require('express')
 require('dotenv').config()
+
+const app = express()
+
+app.use(express.json())
 
 const Notification = db.notification;
 const NotificationProduct = db.notificationProduct;
@@ -30,6 +35,12 @@ database_POS.authenticate()
     console.error('Unable to connect to the database POS:', err);
     process.exit();
   })
+
+require('./routes/notification.routes')(app)
+
+app.listen('8080', () => {
+  console.log('server is listening on port 8080')
+})
 
 let getDataTransactionPOS = async ()=> {
   try{
@@ -143,19 +154,19 @@ const saveIntoDatabase = async (dataNotifications) => {
   }
 }
 
-(async function(){
-  try {
+// (async function(){
+//   try {
 
-    let dataTransactionPos = await getDataTransactionPOS()
-    let dataNotifications = convertDataForNotification(dataTransactionPos)
-    await sendNotification(dataNotifications)
-    await saveIntoDatabase(dataNotifications)
+//     let dataTransactionPos = await getDataTransactionPOS()
+//     let dataNotifications = convertDataForNotification(dataTransactionPos)
+//     await sendNotification(dataNotifications)
+//     await saveIntoDatabase(dataNotifications)
 
-    // reset all variable to be use again
-    dataTransactionPos              = []
-    dataNotifications               = []
+//     // reset all variable to be use again
+//     dataTransactionPos              = []
+//     dataNotifications               = []
 
-  } catch(err){
-    console.log(err)
-  }
-})();
+//   } catch(err){
+//     console.log(err)
+//   }
+// })();
