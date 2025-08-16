@@ -2,11 +2,16 @@ const twilio = require("twilio");
 const db = require('./models/index');
 const crypto = require('crypto');
 const express = require('express')
+const cors = require('cors')
 require('dotenv').config()
 
 const app = express()
 
 app.use(express.json())
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: "POST"
+}))
 
 const Notification = db.notification;
 const NotificationProduct = db.notificationProduct;
