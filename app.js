@@ -1,5 +1,7 @@
 const twilio = require("twilio");
 const db = require('./models/index');
+const database_reminder_notif = require('./databases/database_reminder_notif');
+const database_POS = require('./databases/database_POS');
 const crypto = require('crypto');
 const express = require('express')
 const cors = require('cors')
@@ -15,13 +17,6 @@ app.use(cors({
 
 const Notification = db.notification;
 const NotificationProduct = db.notificationProduct;
-
-const database_reminder_notif = new db.Sequelize(`
-  mysql://${process.env.REMINDER_NOTIF_DB_USER}:${process.env.REMINDER_NOTIF_DB_PASSWORD}@${process.env.REMINDER_NOTIF_DB_HOST}:${process.env.REMINDER_NOTIF_DB_PORT}/${process.env.REMINDER_NOTIF_DB}`
-);
-const database_POS = new db.Sequelize(`
-  mysql://${process.env.POS_DB_USER}:${process.env.POS_DB_PASSWORD}@${process.env.POS_DB_HOST}:${process.env.POS_DB_PORT}/${process.env.POS_DB}`
-);
 
 database_reminder_notif.authenticate()
   .then(() => {
