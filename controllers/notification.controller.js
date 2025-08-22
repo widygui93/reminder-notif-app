@@ -38,12 +38,32 @@ exports.getFutureNotification = async (req, res) => {
 	try{
 		console.log("start to query to database POS to get future data notification")
 
-		let result = await database_POS.query(
-		  `SELECT s.date AS payment_date, c.customer_name , c.customer_email, c.customer_phone FROM sales s JOIN customers c on s.customer_id = c.id WHERE s.date = DATE_FORMAT(DATE_SUB(CONVERT_TZ(:dateFrom, '+00:00', '+07:00'), INTERVAL ${process.env.INTERVAL_DAYS} DAY), '%Y-%m-%d');`,
+		let dataTransactionPos = await database_POS.query(
+		  `SELECT s.date AS payment_date, :dateFrom AS notification_date, c.customer_name , c.customer_email, c.customer_phone FROM sales s JOIN customers c on s.customer_id = c.id WHERE s.date = DATE_FORMAT(DATE_SUB(CONVERT_TZ(:dateFrom, '+00:00', '+07:00'), INTERVAL ${process.env.INTERVAL_DAYS} DAY), '%Y-%m-%d');`,
 		  { raw: true, type: database_POS.QueryTypes.SELECT, replacements: { dateFrom }} 
 		)
 
 		console.log("get future data notification POS successfully")
+
+		const uniquePhones = [...new Set(dataTransactionPos.map(item => item.customer_phone))].map(customer_phone => ({ customer_phone }));
+
+		const result = []
+		for (const uniquePhone of uniquePhones){
+			for(const dataPos of dataTransactionPos){
+			  if(uniquePhone.customer_phone == dataPos.customer_phone){
+			    result.push(
+			      {
+			        payment_date: dataPos.payment_date,
+			        notification_date: dateFrom,
+			        customer_name: dataPos.customer_name,
+			        customer_email: dataPos.customer_email,
+			        customer_phone: dataPos.customer_phone
+			      }
+			    )
+			    break;
+			  }
+			}
+		}
 
 		if(!result){
 			res.status(404).send({
