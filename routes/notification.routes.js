@@ -3,7 +3,7 @@ module.exports = app => {
 	const router = require('express').Router()
 
 	router.post('/report', notifications.getReport)
-	// router.post('/future', notifications.getFutureNotification)
+	router.post('/future', notifications.getFutureNotification)
 
 	app.use('/api/notification', router)
 }
