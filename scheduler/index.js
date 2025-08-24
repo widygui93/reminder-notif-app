@@ -3,6 +3,7 @@ const { getDataTransactionPOSNotificationReminder } = require('../databases/data
 const {saveIntoDatabase} = require('../databases/database_reminder_notif')
 const {convertDataNotificationReminder} = require('../utils/convertData')
 const {sendNotification} = require('../core/app')
+const { logger } = require('../utils/logger')
 
 
 // hour 8 minutes 27
@@ -18,6 +19,6 @@ const job = schedule.scheduleJob('27 8 * * *', async function () {
 		dataNotifications               = []
 
 	} catch(err){
-		console.log(err)
+		logger.error(err)
 	}
 })

@@ -1,5 +1,6 @@
 const { database_reminder_notif } = require('./databases/database_reminder_notif');
 const { database_POS } = require('./databases/database_POS');
+const { logger } = require('./utils/logger')
 const express = require('express')
 const cors = require('cors')
 
@@ -13,19 +14,19 @@ app.use(cors({
 
 database_reminder_notif.authenticate()
   .then(() => {
-    console.log('Connection to database reminder notification has been established successfully.')
+    logger.info('Connection to database reminder notification has been established successfully.')
   })
   .catch(err => {
-    console.error('Unable to connect to the database reminder notification:', err);
+    logger.error('Unable to connect to the database reminder notification:', err);
     process.exit();
   })
 
 database_POS.authenticate()
   .then(() => {
-    console.log('Connection to database POS has been established successfully.')
+    logger.info('Connection to database POS has been established successfully.')
   })
   .catch(err => {
-    console.error('Unable to connect to the database POS:', err);
+    logger.error('Unable to connect to the database POS:', err);
     process.exit();
   })
 

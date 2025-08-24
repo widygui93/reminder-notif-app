@@ -2,6 +2,7 @@ const db = require('../models/index');
 const Notification = db.notification;
 const NotificationProduct = db.notificationProduct;
 require('dotenv').config();
+const { logger } = require('../utils/logger')
 
 const database_reminder_notif = new db.Sequelize(`
   mysql://${process.env.REMINDER_NOTIF_DB_USER}:${process.env.REMINDER_NOTIF_DB_PASSWORD}@${process.env.REMINDER_NOTIF_DB_HOST}:${process.env.REMINDER_NOTIF_DB_PORT}/${process.env.REMINDER_NOTIF_DB}`
@@ -29,10 +30,10 @@ const saveIntoDatabase = async function(dataNotifications){
       }))
     }));
     await transaction.commit();
-    console.log('All records have been inserted successfully.')
+    logger.info('All records have been inserted successfully.')
   } catch (error) {
     await transaction.rollback();
-    console.log(`Error occurred while inserting records: ${error}`)
+    logger.error(`Error occurred while inserting records: ${error}`)
   }
 }
 
@@ -49,11 +50,11 @@ const getDataNotificationReport = async function(dateFrom, dateTo){
       limit: 45
     })
 
-    console.log('get data for notification report successfully')
+    logger.info('get data for notification report successfully')
     return result
 
   } catch (error){
-    console.log(error)
+    logger.error(error)
   }
 }
 
